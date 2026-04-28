@@ -503,386 +503,508 @@ class _StageRow extends StatelessWidget {
   }
 }
 
-class _ComparisonSection extends StatefulWidget {
+class _ComparisonSection extends StatelessWidget {
   const _ComparisonSection();
 
-  @override
-  State<_ComparisonSection> createState() => _ComparisonSectionState();
-}
-
-class _ComparisonSectionState extends State<_ComparisonSection> {
-  int selectedIndex = 0;
-
   static const beats = [
-    _ComparisonBeat(
-      icon: Icons.map_outlined,
+    _StoryBeat(
       label: '1',
-      title: 'Start with a reference view of the place.',
+      title: 'Satellite imagery is useful, but it is not the whole map.',
       body:
-          'A reference map or landscape image can orient those interested in geography. It can show rivers, terrain, settlements, forest, and distance. But orientation is only the beginning of geographic understanding.',
-      satellitePoint: 'Reference views help us locate and orient',
-      prmPoint: 'PRM asks what those places mean and how they are used',
+          'Tools many people use every day let us zoom into a picture of the earth from above. That is powerful. But in remote areas like Chagres, imagery is often unclassified, partly classified, incorrectly labeled, or not labeled at all.',
+      satellitePoint: 'Imagery may show forest without explaining it',
+      prmPoint: 'Our method explains how places are used and understood',
+      icon: Icons.satellite_alt,
+      visualType: _StoryVisualType.satelliteTiles,
     ),
-    _ComparisonBeat(
-      icon: Icons.forest_outlined,
+    _StoryBeat(
       label: '2',
-      title: 'A visible landscape still needs interpretation.',
+      title: 'A green patch can hold many stories.',
       body:
-          'An area may appear simply as forest, riverbank, or open land. Local knowledge can reveal hunting areas, medicinal plants, seasonal routes, sacred places, flood behavior, and land-use histories.',
-      satellitePoint: 'Visual evidence shows surface features',
-      prmPoint: 'Local interpretation adds names, uses, memory, and rules',
+          'A green patch may look empty. To families nearby, it may be hunting forest, a medicinal plant area, a sacred place, a seasonal trail, or land that floods after heavy rain.',
+      satellitePoint: 'Can miss uses, names, history, and rules',
+      prmPoint: 'Adds lived knowledge from community geographers',
+      icon: Icons.groups_2,
+      visualType: _StoryVisualType.hiddenMeaning,
     ),
-    _ComparisonBeat(
-      icon: Icons.layers_outlined,
+    _StoryBeat(
       label: '3',
-      title: 'Field evidence turns observation into knowledge.',
+      title: 'How we map: layer the image with field knowledge.',
       body:
-          'Participatory Research Mapping combines field walks, GPS points, sketch maps, interviews, air photos, satellite imagery, and archival materials. The crucial step happens through shared field verification.',
-      satellitePoint: 'Observation provides clues',
-      prmPoint: 'Fieldwork tests, corrects, and deepens those clues',
+          'Participatory Research Mapping combines field walks, GPS points, sketch maps, interviews, air photos, and satellite imagery. The crucial step happens in the field, where community geographers identify what different parts of the rainforest are, how they are used, and why they matter.',
+      satellitePoint: 'One visual layer: surface appearance',
+      prmPoint: 'Many meaning layers: use, access, risk, value',
+      icon: Icons.layers,
+      visualType: _StoryVisualType.mapLayers,
     ),
-    _ComparisonBeat(
-      icon: Icons.account_tree_outlined,
+    _StoryBeat(
       label: '4',
-      title: 'Cognitive knowledge becomes cartographic evidence.',
+      title: 'That detail matters when decisions have consequences.',
       body:
-          'Knowledge that previously lived in memory can be translated into standardized cartographic form. That makes it easier to communicate in workshops, classrooms, public meetings, government offices, and planning processes.',
-      satellitePoint: 'Mental knowledge can be hard to share at scale',
-      prmPoint: 'Maps make knowledge visible, discussable, and portable',
+          'Conservation, watershed protection, zoning, and governance all require more than “forest” versus “not forest.” Chagres National Park spans about 318,765 acres (129,000 hectares), so accurate mapping requires travel throughout an enormous park and enough detail to understand where protection is urgent, where use is traditional, and where conflict could happen.',
+      satellitePoint: 'Helps spot change after it appears',
+      prmPoint: 'Helps plan before harm or conflict grows',
+      icon: Icons.account_tree_outlined,
+      visualType: _StoryVisualType.decisionPath,
     ),
-    _ComparisonBeat(
-      icon: Icons.handshake_outlined,
+    _StoryBeat(
       label: '5',
-      title: 'The result is a shared tool for decision-making.',
+      title: 'This is why our method is worth funding.',
       body:
-          'The finished map is not just a picture. It is a meeting tool, a teaching tool, a planning tool, and a record of collaborative geographic discovery.',
-      satellitePoint: 'A base view helps people see the setting',
-      prmPoint: 'A PRM output helps people understand, decide, and act',
+          'Your gift supports the careful, iterative fieldwork that fills the gap between raw imagery and real-world decisions. The time and cost come from repeated travel across the park, training local mappers, working with the people who live there to facilitate this process, checking and refining the maps, and giving communities and partners a tool they can act on.',
+      satellitePoint: 'Imagery helps us see',
+      prmPoint: 'PRM helps people understand, decide, and protect',
+      icon: Icons.volunteer_activism,
+      visualType: _StoryVisualType.donorTool,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final selected = beats[selectedIndex];
     return _SectionBand(
       background: const Color(0xFF16402E),
       textOnDark: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _SectionHeader(
-            eyebrow: 'FROM VIEW TO UNDERSTANDING',
-            title: 'How geographic evidence becomes a usable map',
-            body:
-                'This model is not pretending that one image can explain Chagres. It shows the learning sequence: begin with a reference view, add field and local interpretation, then translate that knowledge into cartographic tools people can discuss and use.',
-            textOnDark: true,
-          ),
-          const SizedBox(height: 34),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isNarrow = constraints.maxWidth < 900;
-              final controls = _ComparisonControls(
-                beats: beats,
-                selectedIndex: selectedIndex,
-                onSelected: (index) => setState(() => selectedIndex = index),
-              );
-              final visual = _ComparisonVisual(beat: selected);
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 900;
+          final isPhone = constraints.maxWidth < 600;
 
-              if (isNarrow) {
-                return Column(
-                  children: [controls, const SizedBox(height: 24), visual],
-                );
-              }
-
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(width: 380, child: controls),
-                  const SizedBox(width: 34),
-                  Expanded(child: visual),
-                ],
-              );
-            },
-          ),
-        ],
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'SEEING IS NOT THE SAME AS UNDERSTANDING',
+                style: TextStyle(
+                  color: const Color(0xFFFFC766),
+                  fontSize: isPhone ? 11 : 13,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Comparing Satellite Imagery and the Maps We Make',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'It is easy to feel like the whole world has already been mapped because satellite imagery is everywhere. But in remote places like Chagres, imagery may be unclassified, partly classified, or mislabeled. Our method asks what the place means, how it is used, and what people need to decide wisely.',
+                style: TextStyle(
+                  color: const Color(0xFFE5ECF5),
+                  fontSize: isPhone ? 16 : 18,
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: isPhone ? 24 : 42),
+              const _StaticStoryComparison(),
+              SizedBox(height: isPhone ? 28 : 42),
+              for (var index = 0; index < beats.length; index++) ...[
+                _StaticStoryBeatCard(beat: beats[index], isMobile: isMobile),
+                if (index != beats.length - 1) const SizedBox(height: 16),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _ComparisonBeat {
-  final IconData icon;
+class _StoryBeat {
   final String label;
   final String title;
   final String body;
   final String satellitePoint;
   final String prmPoint;
+  final IconData icon;
+  final _StoryVisualType visualType;
 
-  const _ComparisonBeat({
-    required this.icon,
+  const _StoryBeat({
     required this.label,
     required this.title,
     required this.body,
     required this.satellitePoint,
     required this.prmPoint,
+    required this.icon,
+    required this.visualType,
   });
 }
 
-class _ComparisonControls extends StatelessWidget {
-  final List<_ComparisonBeat> beats;
-  final int selectedIndex;
-  final ValueChanged<int> onSelected;
+enum _StoryVisualType {
+  satelliteTiles,
+  hiddenMeaning,
+  mapLayers,
+  decisionPath,
+  donorTool,
+}
 
-  const _ComparisonControls({
-    required this.beats,
-    required this.selectedIndex,
-    required this.onSelected,
-  });
+class _StaticStoryComparison extends StatelessWidget {
+  const _StaticStoryComparison();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final isPhone = MediaQuery.of(context).size.width < 600;
+    const satellite = _StaticComparisonPanel(
+      icon: Icons.satellite_alt,
+      title: 'Satellite imagery',
+      color: Color(0xFF77A7D9),
+      points: [
+        'This is a valuable starting point, not a complete map of land meaning or land use.',
+        'It shows forest canopy, water, roads, roofs, and clearings.',
+        'It cannot tell who uses a place, what it is called, or why it matters.',
+      ],
+    );
+    const prm = _StaticComparisonPanel(
+      icon: Icons.edit_location_alt,
+      title: 'How we map',
+      color: Color(0xFF7FB069),
+      points: [
+        'Adds field notes, GPS points, names, routes, rules, and local history.',
+        'Connects ecological detail with community knowledge.',
+        'Creates a tool for conservation, zoning, governance, and negotiation.',
+      ],
+    );
+
+    if (isPhone) {
+      return const Column(children: [satellite, SizedBox(height: 14), prm]);
+    }
+
+    return const Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (var index = 0; index < beats.length; index++)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: _ComparisonButton(
-              beat: beats[index],
-              selected: index == selectedIndex,
-              onTap: () => onSelected(index),
-            ),
-          ),
+        Expanded(child: satellite),
+        SizedBox(width: 18),
+        Expanded(child: prm),
       ],
     );
   }
 }
 
-class _ComparisonButton extends StatelessWidget {
-  final _ComparisonBeat beat;
-  final bool selected;
-  final VoidCallback onTap;
+class _StaticComparisonPanel extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Color color;
+  final List<String> points;
 
-  const _ComparisonButton({
-    required this.beat,
-    required this.selected,
-    required this.onTap,
+  const _StaticComparisonPanel({
+    required this.icon,
+    required this.title,
+    required this.color,
+    required this.points,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: selected
-              ? const Color(0xFFFFC766)
-              : Colors.white.withValues(alpha: 0.07),
-          border: Border.all(
-            color: selected
-                ? const Color(0xFFFFD98B)
-                : Colors.white.withValues(alpha: 0.14),
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: selected
-                  ? const Color(0xFF16402E)
-                  : Colors.white.withValues(alpha: 0.12),
-              child: Text(
-                beat.label,
-                style: TextStyle(
-                  color: selected ? Colors.white : const Color(0xFFFFC766),
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                beat.title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: selected ? const Color(0xFF10231F) : Colors.white,
-                  fontWeight: FontWeight.w800,
-                  height: 1.25,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ComparisonVisual extends StatelessWidget {
-  final _ComparisonBeat beat;
-
-  const _ComparisonVisual({required this.beat});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 320),
-      child: Container(
-        key: ValueKey(beat.label),
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: const Color(0xFF07111F).withValues(alpha: 0.76),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ComparisonLandscape(beat: beat),
-            const SizedBox(height: 22),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final isTight = constraints.maxWidth < 560;
-                final panels = [
-                  _PointPanel(
-                    icon: Icons.map_outlined,
-                    title: 'Reference view',
-                    body: beat.satellitePoint,
-                    color: const Color(0xFF9ED0FF),
-                  ),
-                  _PointPanel(
-                    icon: Icons.map_outlined,
-                    title: 'PRM map',
-                    body: beat.prmPoint,
-                    color: const Color(0xFFFFC766),
-                  ),
-                ];
-                if (isTight) {
-                  return Column(
-                    children: [
-                      panels[0],
-                      const SizedBox(height: 12),
-                      panels[1],
-                    ],
-                  );
-                }
-                return Row(
-                  children: [
-                    Expanded(child: panels[0]),
-                    const SizedBox(width: 14),
-                    Expanded(child: panels[1]),
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            Text(
-              beat.body,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: const Color(0xFFE5ECF5),
-                height: 1.6,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ComparisonLandscape extends StatelessWidget {
-  final _ComparisonBeat beat;
-
-  const _ComparisonLandscape({required this.beat});
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
-      height: 320,
-      clipBehavior: Clip.antiAlias,
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
+        color: const Color(0xFF07111F).withValues(alpha: 0.88),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        border: Border.all(color: color.withValues(alpha: 0.46), width: 1.4),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/chagres_broadermap.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    const Color(0xFF173529).withValues(alpha: 0.88),
-                    const Color(0xFF173529).withValues(alpha: 0.42),
-                    const Color(0xFF5C4021).withValues(alpha: 0.58),
-                  ],
+          Row(
+            children: [
+              Icon(icon, color: color, size: 30),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 21,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-          const Positioned(left: 20, right: 20, top: 150, child: _RiverLine()),
-          const Positioned(
-            left: 18,
-            top: 18,
-            child: _MapLabel(text: 'reference view', color: Color(0xFF9ED0FF)),
-          ),
-          const Positioned(
-            right: 18,
-            top: 18,
-            child: _MapLabel(
-              text: 'interpreted layers',
-              color: Color(0xFFFFC766),
-            ),
-          ),
-          const Positioned(
-            left: 56,
-            bottom: 58,
-            child: _MapLabel(text: 'water source', color: Color(0xFF9ED0FF)),
-          ),
-          const Positioned(
-            right: 72,
-            bottom: 88,
-            child: _MapLabel(text: 'seasonal trail', color: Color(0xFFFFC766)),
-          ),
-          const Positioned(
-            right: 34,
-            top: 112,
-            child: _MapLabel(
-              text: 'medicinal forest',
-              color: Color(0xFFB7D889),
-            ),
-          ),
-          Positioned(
-            left: 24,
-            right: 24,
-            bottom: 20,
-            child: Row(
+          const SizedBox(height: 16),
+          for (final point in points) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(beat.icon, color: Colors.white, size: 26),
+                Container(
+                  width: 7,
+                  height: 7,
+                  margin: const EdgeInsets.only(top: 8),
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    beat.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    point,
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      shadows: [Shadow(color: Colors.black, blurRadius: 8)],
+                      color: Color(0xFFD7E0EA),
+                      fontSize: 15,
+                      height: 1.5,
                     ),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 10),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _StaticStoryBeatCard extends StatelessWidget {
+  final _StoryBeat beat;
+  final bool isMobile;
+
+  const _StaticStoryBeatCard({required this.beat, required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    final visualAid = _StoryVisualAid(
+      type: beat.visualType,
+      isMobile: isMobile,
+    );
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(isMobile ? 20 : 26),
+      decoration: BoxDecoration(
+        color: const Color(0xFF101A2F).withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: isMobile
+          ? Column(
+              children: [
+                _StoryBeatText(beat: beat, isMobile: isMobile),
+                const SizedBox(height: 18),
+                visualAid,
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 6,
+                  child: _StoryBeatText(beat: beat, isMobile: isMobile),
+                ),
+                const SizedBox(width: 22),
+                Expanded(flex: 4, child: visualAid),
+              ],
+            ),
+    );
+  }
+}
+
+class _StoryBeatText extends StatelessWidget {
+  final _StoryBeat beat;
+  final bool isMobile;
+
+  const _StoryBeatText({required this.beat, required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: Color(0xFFFFC766),
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            beat.label,
+            style: const TextStyle(
+              color: Color(0xFF07111F),
+              fontSize: 17,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(beat.icon, color: const Color(0xFF7FB069), size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      beat.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: isMobile ? 20 : 23,
+                        fontWeight: FontWeight.w800,
+                        height: 1.22,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                beat.body,
+                style: TextStyle(
+                  color: const Color(0xFFD7E0EA),
+                  fontSize: isMobile ? 15 : 16,
+                  height: 1.58,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  _StoryTag(
+                    text: beat.satellitePoint,
+                    color: const Color(0xFF77A7D9),
+                  ),
+                  _StoryTag(
+                    text: beat.prmPoint,
+                    color: const Color(0xFF7FB069),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StoryVisualAid extends StatelessWidget {
+  final _StoryVisualType type;
+  final bool isMobile;
+
+  const _StoryVisualAid({required this.type, required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: isMobile ? 180 : 210),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xFF07111F).withValues(alpha: 0.78),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: switch (type) {
+        _StoryVisualType.satelliteTiles => const _SatelliteTileVisual(),
+        _StoryVisualType.hiddenMeaning => const _HiddenMeaningVisual(),
+        _StoryVisualType.mapLayers => const _MapLayerVisual(),
+        _StoryVisualType.decisionPath => const _DecisionPathVisual(),
+        _StoryVisualType.donorTool => const _DonorToolVisual(),
+      },
+    );
+  }
+}
+
+class _SatelliteTileVisual extends StatelessWidget {
+  const _SatelliteTileVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _VisualTitle(icon: Icons.grid_view, text: 'Pixels show surface'),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 124,
+          child: GridView.count(
+            crossAxisCount: 5,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            physics: const NeverScrollableScrollPhysics(),
+            children: List.generate(15, (index) {
+              final colors = [
+                const Color(0xFF1F5A38),
+                const Color(0xFF2E6F3C),
+                const Color(0xFF77A7D9),
+                const Color(0xFF36513A),
+              ];
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors[index % colors.length],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HiddenMeaningVisual extends StatelessWidget {
+  const _HiddenMeaningVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _VisualTitle(
+          icon: Icons.visibility_off,
+          text: 'Meaning is hidden from above',
+        ),
+        SizedBox(height: 16),
+        _VisualPill(icon: Icons.forest, text: 'medicinal plants'),
+        SizedBox(height: 10),
+        _VisualPill(icon: Icons.route, text: 'seasonal trail'),
+        SizedBox(height: 10),
+        _VisualPill(icon: Icons.water_drop, text: 'flood risk'),
+      ],
+    );
+  }
+}
+
+class _MapLayerVisual extends StatelessWidget {
+  const _MapLayerVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 188,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 14,
+            right: 44,
+            top: 26,
+            child: _LayerSheet(color: Color(0xFF77A7D9), label: 'imagery'),
+          ),
+          Positioned(
+            left: 28,
+            right: 28,
+            top: 70,
+            child: _LayerSheet(color: Color(0xFFFFC766), label: 'field notes'),
+          ),
+          Positioned(
+            left: 42,
+            right: 12,
+            top: 114,
+            child: _LayerSheet(
+              color: Color(0xFF7FB069),
+              label: 'community knowledge',
             ),
           ),
         ],
@@ -891,41 +1013,135 @@ class _ComparisonLandscape extends StatelessWidget {
   }
 }
 
-class _RiverLine extends StatelessWidget {
-  const _RiverLine();
+class _DecisionPathVisual extends StatelessWidget {
+  const _DecisionPathVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _DecisionStep(icon: Icons.image_search, text: 'See change'),
+        Icon(Icons.arrow_downward, color: Color(0xFFFFC766)),
+        _DecisionStep(icon: Icons.map, text: 'Understand context'),
+        Icon(Icons.arrow_downward, color: Color(0xFFFFC766)),
+        _DecisionStep(icon: Icons.task_alt, text: 'Plan before harm grows'),
+      ],
+    );
+  }
+}
+
+class _DonorToolVisual extends StatelessWidget {
+  const _DonorToolVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _VisualTitle(
+          icon: Icons.volunteer_activism,
+          text:
+              'Donation enables all of these steps which facilitate this process',
+        ),
+        SizedBox(height: 16),
+        _VisualPill(icon: Icons.gps_fixed, text: 'GPS + fieldwork'),
+        SizedBox(height: 10),
+        _VisualPill(icon: Icons.school, text: 'trained community geographers'),
+        SizedBox(height: 10),
+        _VisualPill(icon: Icons.handshake, text: 'governance-ready maps'),
+      ],
+    );
+  }
+}
+
+class _VisualTitle extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _VisualTitle({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: const Color(0xFFFFC766), size: 22),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _VisualPill extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _VisualPill({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 18,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF5FB6D6).withValues(alpha: 0.82),
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [BoxShadow(color: Color(0xAA063B52), blurRadius: 18)],
+        color: const Color(0xFF16402E).withValues(alpha: 0.82),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color(0xFF7FB069).withValues(alpha: 0.36),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: const Color(0xFF7FB069), size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Color(0xFFD7E0EA),
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _MapLabel extends StatelessWidget {
-  final String text;
+class _LayerSheet extends StatelessWidget {
   final Color color;
+  final String label;
 
-  const _MapLabel({required this.text, required this.color});
+  const _LayerSheet({required this.color, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      height: 58,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.92),
+        color: color.withValues(alpha: 0.84),
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.38)),
       ),
       child: Text(
-        text,
+        label,
         style: const TextStyle(
-          color: Color(0xFF10231F),
-          fontSize: 13,
+          color: Color(0xFF07111F),
           fontWeight: FontWeight.w900,
         ),
       ),
@@ -933,49 +1149,54 @@ class _MapLabel extends StatelessWidget {
   }
 }
 
-class _PointPanel extends StatelessWidget {
+class _DecisionStep extends StatelessWidget {
   final IconData icon;
-  final String title;
-  final String body;
-  final Color color;
+  final String text;
 
-  const _PointPanel({
-    required this.icon,
-    required this.title,
-    required this.body,
-    required this.color,
-  });
+  const _DecisionStep({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        border: Border.all(color: color.withValues(alpha: 0.45)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+    return Row(
+      children: [
+        Icon(icon, color: const Color(0xFF7FB069), size: 22),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            body,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFFDDE8E3),
-              height: 1.45,
-            ),
-          ),
-        ],
+        ),
+      ],
+    );
+  }
+}
+
+class _StoryTag extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const _StoryTag({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.46)),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: 13,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     );
   }
