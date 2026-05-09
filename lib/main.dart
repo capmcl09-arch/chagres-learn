@@ -46,6 +46,7 @@ class LearningHomePage extends StatelessWidget {
             _PrmStagesSection(),
             _ComparisonSection(),
             _FieldworkSection(),
+            _WhyAndHowSection(),
             _GlossarySection(),
             _FooterSection(),
           ],
@@ -1267,6 +1268,288 @@ class _FieldworkSection extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class _WhyAndHowSection extends StatelessWidget {
+  const _WhyAndHowSection();
+
+  static const pillars = [
+    _WhyPillar(
+      number: '1',
+      title: 'Authorized by Indigenous Congress',
+      headline: 'This is not outside research. It is requested research.',
+      body:
+          'In June 2025 the Emberá and Wounaan Congreso Local — the governing body of communities inside Chagres National Park (CNP) — voted unanimously to invite KU geographers to map their lands and help draft a management plan acceptable to the Panamanian government. That invitation was earned over decades of participatory mapping with their relatives in Darién, and it gives the work a legal and political foundation that outside-imposed research projects do not have.',
+    ),
+    _WhyPillar(
+      number: '2',
+      title: 'Living research, not a final report',
+      headline: 'Findings are public, evolving, and built to be used.',
+      body:
+          'Most research ends at an academic article. This project is different: maps, methods, and field updates are published openly, refined as the work advances, and shared directly with Panamanian government agencies. Donors, partner institutions, schools, and the next generation of geographers can follow the work as it happens — not years after the fact.',
+    ),
+    _WhyPillar(
+      number: '3',
+      title: 'Community geographers as co-authors',
+      headline:
+          'Training and authorship stay with the people who know the land.',
+      body:
+          'Community representatives are formally certified as geographers. They train in GPS, basic cartography, heads-up imagery analysis, and drone-based forest management. They co-produce and co-author the maps and data alongside KU faculty and students, and the final cartographic information remains under the ownership of the local communities. That is what makes the result a lasting tool, not a report on a shelf.',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _SectionBand(
+      background: const Color(0xFF122B28),
+      textOnDark: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionHeader(
+            eyebrow: 'WHY THIS WORK MATTERS',
+            title: 'An Indigenous-led mapping initiative built to last',
+            body:
+                'The Chagres Initiative is a long-term partnership rooted in trust, authorized by Indigenous leadership, and designed so the maps and methods stay with the communities who steward Panama Canal water security. Three things make this work different — and explain why it depends on private support.',
+            textOnDark: true,
+          ),
+          const SizedBox(height: 36),
+          for (var i = 0; i < pillars.length; i++) ...[
+            _WhyPillarCard(pillar: pillars[i]),
+            if (i != pillars.length - 1) const SizedBox(height: 14),
+          ],
+          const SizedBox(height: 48),
+          const _FundingBlock(),
+        ],
+      ),
+    );
+  }
+}
+
+class _WhyPillar {
+  final String number;
+  final String title;
+  final String headline;
+  final String body;
+
+  const _WhyPillar({
+    required this.number,
+    required this.title,
+    required this.headline,
+    required this.body,
+  });
+}
+
+class _WhyPillarCard extends StatelessWidget {
+  final _WhyPillar pillar;
+  const _WhyPillarCard({required this.pillar});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(26),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 720;
+          final number = Container(
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFC766),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              pillar.number,
+              style: const TextStyle(
+                color: Color(0xFF0F1B31),
+                fontWeight: FontWeight.w900,
+                fontSize: 18,
+              ),
+            ),
+          );
+          final text = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                pillar.title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                pillar.headline,
+                style: const TextStyle(
+                  color: Color(0xFFFFC766),
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                pillar.body,
+                style: const TextStyle(
+                  color: Color(0xFFDDE8E3),
+                  fontSize: 16,
+                  height: 1.6,
+                ),
+              ),
+            ],
+          );
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [number, const SizedBox(height: 16), text],
+            );
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              number,
+              const SizedBox(width: 22),
+              Expanded(child: text),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FundingBlock extends StatelessWidget {
+  const _FundingBlock();
+
+  static const bullets = [
+    _FundingBullet(
+      icon: Icons.percent,
+      title: '100% to direct project costs',
+      body:
+          'No overhead, no salaries, no admin fees. Tax-deductible gifts via KU Endowment go entirely to the work — village workshops, mapping technology, travel, and stipends for community geographers and KU researchers.',
+    ),
+    _FundingBullet(
+      icon: Icons.public,
+      title: 'A public-private model',
+      body:
+          'A Launch KU project on KU Endowment\'s crowdfunding platform — a novel partnership replacing the federal and NGO funding for international research that has been steadily cut.',
+    ),
+    _FundingBullet(
+      icon: Icons.timeline_outlined,
+      title: 'Open, ongoing, accountable',
+      body:
+          'Donors and partners can follow the maps, methods, and field updates as they evolve — and see where every gift is at work.',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0E1F1C),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color(0xFFFFC766).withValues(alpha: 0.32),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _Eyebrow(text: 'WHY YOUR SUPPORT MATTERS', dark: true),
+          const SizedBox(height: 12),
+          Text(
+            'Federal funding for this work is shrinking. Private support keeps it alive.',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 14),
+          const Text(
+            'Federal and NGO funding for international research on conservation, Indigenous knowledge, and Panama Canal Water Security is being cut. The Chagres Initiative answers with a public-private model — tax-deductible gifts routed entirely to direct project costs supporting Indigenous villagers, community geographers, and KU researchers.',
+            style: TextStyle(
+              color: Color(0xFFDDE8E3),
+              fontSize: 16,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 26),
+          for (var i = 0; i < bullets.length; i++) ...[
+            bullets[i],
+            if (i != bullets.length - 1) const SizedBox(height: 14),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _FundingBullet extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String body;
+
+  const _FundingBullet({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 38,
+          height: 38,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7FB069).withValues(alpha: 0.14),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: const Color(0xFF7FB069).withValues(alpha: 0.46),
+            ),
+          ),
+          child: Icon(icon, color: const Color(0xFF7FB069), size: 20),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                body,
+                style: const TextStyle(
+                  color: Color(0xFFD7E0EA),
+                  fontSize: 15,
+                  height: 1.55,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
