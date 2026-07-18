@@ -44,6 +44,7 @@ class LearningHomePage extends StatelessWidget {
             _IntroSection(),
             _PrmDiagramSection(),
             _PrmStagesSection(),
+            _AISection(),
             _ComparisonSection(),
             _FieldworkSection(),
             _WhyAndHowSection(),
@@ -499,6 +500,136 @@ class _StageRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AISection extends StatelessWidget {
+  const _AISection();
+
+  static const pillars = [
+    _AIPillar(
+      title: 'Building Maps',
+      body:
+          'A.I.-assisted workflows help digitize community sketch-maps into GIS layers, extract place-names and features from field notes and photographs, and cross-reference community mapping with satellite and drone imagery — so our zonation maps stay both community-authored and cartographically rigorous.',
+    ),
+    _AIPillar(
+      title: 'Engaging Supporters',
+      body:
+          'This website itself was co-built with A.I., letting a small team keep bilingual content, project updates, and photo stories current so supporters, funders, and partner institutions always have an up-to-date window into the fieldwork.',
+    ),
+    _AIPillar(
+      title: 'Managing Data Collection',
+      body:
+          'From structured intake of GPS points and interview transcripts to organizing air-photo and drone captures across field trips, A.I.-driven pipelines keep our data consistent, versioned, and ready for community review.',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _SectionBand(
+      background: const Color(0xFFF3EFE1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionHeader(
+            eyebrow: 'AI IN GEOGRAPHY',
+            title: 'A first in geography: A.I. woven into participatory mapping',
+            body:
+                'The Chagres Initiative is the first project in geography to weave modern A.I. into Participatory Research Mapping — from cartography, to community and supporter engagement, to end-to-end field data management. Cartography stays community-authored; A.I. handles the connective work so a small team can move at the pace of the fieldwork without losing rigor.',
+          ),
+          const SizedBox(height: 32),
+          for (var i = 0; i < pillars.length; i++) ...[
+            _AIPillarCard(pillar: pillars[i]),
+            if (i != pillars.length - 1) const SizedBox(height: 14),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _AIPillar {
+  final String title;
+  final String body;
+
+  const _AIPillar({required this.title, required this.body});
+}
+
+class _AIPillarCard extends StatelessWidget {
+  final _AIPillar pillar;
+  const _AIPillarCard({required this.pillar});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(26),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFD8D0C2)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 720;
+          final marker = Container(
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1F6B57),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.auto_awesome,
+              color: Color(0xFFF7F5EF),
+              size: 22,
+            ),
+          );
+          final text = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                pillar.title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: const Color(0xFF17201C),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                pillar.body,
+                style: const TextStyle(
+                  color: Color(0xFF36413C),
+                  fontSize: 16,
+                  height: 1.6,
+                ),
+              ),
+            ],
+          );
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [marker, const SizedBox(height: 16), text],
+            );
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              marker,
+              const SizedBox(width: 22),
+              Expanded(child: text),
+            ],
+          );
+        },
       ),
     );
   }
